@@ -3,8 +3,10 @@ public class main {
 	
 	public static void main(String[] args) {
 	
-	Gui g = new Gui();
-	
+		
+		Group gr = new Group();	
+		Gui g = new Gui(gr);
+		g.makeFrame();
 	}
 	
 

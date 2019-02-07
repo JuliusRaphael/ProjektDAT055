@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 
-public class Gui extends JFrame implements ActionListener{
+public class Gui extends JFrame{
 		JPanel jp;
 		JMenu fileMenu;
 		JMenu helpMenu;
@@ -26,9 +26,14 @@ public class Gui extends JFrame implements ActionListener{
 		JPanel voteButtons;
 		JPanel scores;
 		JButton b1,b2,b3,b4,b5;
+		Group group;
 		
-		public Gui(){
-
+		
+		public Gui(Group gr){
+			this.group = gr;
+		}	
+		
+		public void makeFrame(){
 			
 			//MENUBAR
 			fileMenu = new JMenu("File");
@@ -101,8 +106,12 @@ public class Gui extends JFrame implements ActionListener{
 					b3 = new JButton("3"); b3.setPreferredSize(new Dimension(40,40));
 					b4 = new JButton("4"); b4.setPreferredSize(new Dimension(40,40));
 					b5 = new JButton("5"); b5.setPreferredSize(new Dimension(40,40));
-					b5.addActionListener(this);
-				
+					b1.addActionListener((e) -> {sendVote(1);});
+					b2.addActionListener((e) -> {sendVote(2);});
+					b3.addActionListener((e) -> {sendVote(3);});
+					b4.addActionListener((e) -> {sendVote(4);});
+					b5.addActionListener((e) -> {sendVote(5);});
+					
 					voteButtons.add(b1);voteButtons.add(b2);voteButtons.add(b3);
 					voteButtons.add(b4);voteButtons.add(b5);
 					
@@ -143,10 +152,9 @@ public class Gui extends JFrame implements ActionListener{
 			
 		}
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("Du gav tomas en 5a!");
+
+		private void sendVote(int i) {
+			System.out.println("Du gav tomas en: " + i);
 			
 		}
-
 }
