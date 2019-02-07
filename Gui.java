@@ -4,7 +4,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.*;
-
+import java.util.*;
+import java.util.*;
+import java.util.*;
+import java.util.*;
 
 public class Gui extends JFrame{
 		JPanel jp;
@@ -18,138 +21,51 @@ public class Gui extends JFrame{
 		JLabel jl2;
 		JLabel jl3;
 		JLabel jl4;
-		JPanel quenePanel;
+		JPanel queuePanel;
 		JPanel votePanel;
 		JPanel scorePanel;
 		JPanel qOrderPanel;
 		JPanel qOrderList;
-		JPanel voteButtons;
+		JPanel votingPanel;
 		JPanel scores;
-		JButton b1,b2,b3,b4,b5;
 		Group group;
-		
+		ArrayList<JLabel> queueUsers;
+		ArrayList<JLabel> highScoreUsers;
+		ArrayList<JLabel> ratingLabels;
+		ArrayList<JButton> votingButtons;
 		
 		public Gui(Group gr){
 			this.group = gr;
+			queueUsers = new ArrayList<>();
+			votingButtons = new ArrayList<>();
+			ratingLabels = new ArrayList<>();
+			highScoreUsers = new ArrayList<>();
 		}	
+		
+		
 		
 		public void makeFrame(){
 			
 			//MENUBAR
-			fileMenu = new JMenu("File");
-				login = new JMenuItem("Login");
-				fileMenu.add(login);
-				
-				quit = new JMenuItem("Quit");
-				fileMenu.add(quit);
-			
-			helpMenu = new JMenu("Help");
-				help = new JMenuItem("Help");
-				helpMenu.add(help);
-			
-			menubar = new JMenuBar();
-				menubar.add(fileMenu);
-				menubar.add(helpMenu);
-			setJMenuBar(menubar);
+			makeMenuBar();
 			
 			//MAINWINDOW JPANEL 1,3 GRID
 			jp = new JPanel(new GridLayout(1,3));
 			
-			//THREE Panels for 
+			//CREATE USER LABELS. SAVED IN queueUsers AND highScoreUsers
+			makeUserLabels();
 			
-			//Queuelist
-			quenePanel = new JPanel();
-			quenePanel.setLayout(new BoxLayout(quenePanel, BoxLayout.PAGE_AXIS));
-			quenePanel.setBorder(new EtchedBorder());		
-				jl = new JLabel("KÃ¶lista");
-				jl.setBorder(new EtchedBorder());	
-				
-				qOrderPanel = new JPanel();
-				qOrderPanel.setBorder(new EtchedBorder());	
-				
-					jl4 = new JLabel("NÃ¤sta");
-					jl4.setBorder(new EtchedBorder());
-
-				
-					qOrderList = new JPanel(new GridLayout(5,1));
-					
-						qOrderList.setBorder(new EtchedBorder());	
-						//qOrderList.setLayout(new BoxLayout(qOrderList, BoxLayout.PAGE_AXIS));
-						qOrderList.add(new JLabel("Mellard"));
-						qOrderList.add(new JLabel("Alex"));
-						qOrderList.add(new JLabel("Julius"));
-						qOrderList.add(new JLabel("Berko"));
-						qOrderList.add(new JLabel("Tomas"));
-					
-					qOrderPanel.add(jl4, JPanel.TOP_ALIGNMENT);
-					qOrderPanel.add(qOrderList);
-						
-				quenePanel.add(jl);	
-				quenePanel.add(qOrderPanel);
+			//CREATES QUEUE
+			makeQueue(queueUsers.size());
 			
-			//Voting menu
-			votePanel = new JPanel();
-			votePanel.setBorder(new EtchedBorder());
-			votePanel.setLayout(new BoxLayout(votePanel, BoxLayout.PAGE_AXIS));
+			//CREATE VOTING MENU
+			makeVotingMenu();
 			
-				jl2 = new JLabel("RÃ¶sta pÃ¥:");
-				jl2.setBorder(new EtchedBorder());	
-				
-				JPanel subHeadPanel = new JPanel();
-				subHeadPanel.setBorder(new EtchedBorder());
-				subHeadPanel.setLayout(new BoxLayout(subHeadPanel, BoxLayout.PAGE_AXIS));
-				
-				voteButtons = new JPanel(new GridLayout(1,5));
-				voteButtons.setBorder(new EtchedBorder());
-					b1 = new JButton("1"); b1.setPreferredSize(new Dimension(40,40));
-					b2 = new JButton("2"); b2.setPreferredSize(new Dimension(40,40));
-					b3 = new JButton("3"); b3.setPreferredSize(new Dimension(40,40));
-					b4 = new JButton("4"); b4.setPreferredSize(new Dimension(40,40));
-					b5 = new JButton("5"); b5.setPreferredSize(new Dimension(40,40));
-					b1.addActionListener((e) -> {sendVote(1);});
-					b2.addActionListener((e) -> {sendVote(2);});
-					b3.addActionListener((e) -> {sendVote(3);});
-					b4.addActionListener((e) -> {sendVote(4);});
-					b5.addActionListener((e) -> {sendVote(5);});
-					
-					voteButtons.add(b1);voteButtons.add(b2);voteButtons.add(b3);
-					voteButtons.add(b4);voteButtons.add(b5);
-					
-				subHeadPanel.add(new JLabel("Tomas fika"));	
-				subHeadPanel.add(voteButtons);
-					
-			votePanel.add(jl2);
-			votePanel.add(subHeadPanel);
-			votePanel.add(new JPanel());
-
-
-			
-			
-			//Highscore
-			scorePanel = new JPanel();
-			scorePanel.setBorder(new EtchedBorder());
-			scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.PAGE_AXIS));
-				jl3 = new JLabel("Fikascore:");
-				jl3.setBorder(new EtchedBorder());
-				scores = new JPanel(new GridLayout(5,3));
-				scores.setBorder(new EtchedBorder());
-					scores.add(new JLabel("1."));scores.add(new JLabel("Tomas"));scores.add(new JLabel("1000"));
-					scores.add(new JLabel("2."));scores.add(new JLabel("Alex"));scores.add(new JLabel("700"));
-					scores.add(new JLabel("3."));scores.add(new JLabel("Mellard"));scores.add(new JLabel("200."));
-					scores.add(new JLabel("4."));scores.add(new JLabel("Berko"));scores.add(new JLabel("100"));
-					scores.add(new JLabel("5."));scores.add(new JLabel("Julius"));scores.add(new JLabel("100"));
-					
-				
-			scorePanel.add(jl3);
-			scorePanel.add(scores);
-			
-			jp.add(quenePanel);jp.add(votePanel);jp.add(scorePanel);
-			
+			//CREATE HIGH SCORE LIST
+			makeHighScore(highScoreUsers.size());
 			
 			setSize(1100,500);
 			add(jp);
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
 			pack();
 			setVisible(true);
 			
@@ -157,7 +73,152 @@ public class Gui extends JFrame{
 
 
 		private void sendVote(int i) {
-			System.out.println("Du gav tomas en: " + i);
+			System.out.println("Du gav tomas en: " + i);	
+		}
+		//CREATES THE PANEL AND LIST FOR HIGHSCORE
+		private void makeHighScore(int noOfUsers) {
+			
+			scorePanel = new JPanel();
+			scorePanel.setBorder(new EtchedBorder());
+			scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
+				jl3 = new JLabel("Fikascore");
+				jl3.setBorder(new EtchedBorder());
+				scores = new JPanel(new GridLayout(noOfUsers,3));
+				scores.setBorder(new EtchedBorder());
+				
+				makeRatingLabels(noOfUsers);
+				
+				for(int i = 0; i < noOfUsers; i++) {
+									
+					
+					scores.add(makePositionLabels(noOfUsers).get(i));
+					scores.add(highScoreUsers.get(i));
+					scores.add(ratingLabels.get(i));
+				}
+				
+			scorePanel.add(jl3);
+			scorePanel.add(scores);
+			jp.add(scorePanel);
+		}
+		
+		
+		//CREATES POSITIONLABELS FOR HIGH SCORE
+		private ArrayList<JLabel> makePositionLabels(int noOfLabels) {
+			ArrayList<JLabel> labels = new ArrayList<>();
+			for(int i = 1; i <= noOfLabels; i++) {
+				JLabel temp = new JLabel(Integer.toString(i));
+				labels.add(temp);
+			}			
+			return labels;
+		}
+		//CREATES SCORELABELS FOR HIGHSCORE
+		private void makeRatingLabels(int noOFLabels) {
+			
+			for(User u: group.getUsers()) {
+			
+			JLabel temp = new JLabel(Integer.toString(u.getRating()));
+			ratingLabels.add(temp);
+
+			}
+		}
+		//CREATES USER LABELS
+		private void makeUserLabels() {
+					
+			for(User u: group.getUsers()) {
+				
+				queueUsers.add(new JLabel(u.getID()));
+				highScoreUsers.add(new JLabel(u.getID()));
+				
+			}	
+		}
+		//CREATES QUEUE PANEL AND ADDS USERLABELS
+		private void makeQueue(int noOfUsers) {
+			queuePanel = new JPanel();
+			queuePanel.setLayout(new BoxLayout(queuePanel, BoxLayout.PAGE_AXIS));
+			queuePanel.setBorder(new EtchedBorder());		
+				jl = new JLabel("Kölista");
+				jl.setBorder(new EtchedBorder());	
+				
+				qOrderPanel = new JPanel();
+				qOrderPanel.setBorder(new EtchedBorder());	
+				
+					jl4 = new JLabel("Nästa");
+					jl4.setBorder(new EtchedBorder());
+
+				
+					qOrderList = new JPanel(new GridLayout(noOfUsers,1));
+					
+						qOrderList.setBorder(new EtchedBorder());	
+						qOrderList.setLayout(new BoxLayout(qOrderList, BoxLayout.PAGE_AXIS));
+						for(JLabel label: queueUsers) {
+							
+							qOrderList.add(label);
+						}
+							
+					
+					qOrderPanel.add(jl4, JPanel.TOP_ALIGNMENT);
+					qOrderPanel.add(qOrderList);
+						
+				queuePanel.add(jl);	
+				queuePanel.add(qOrderPanel);
+				jp.add(queuePanel);
+		}
+		//CREATES VOTING BUTTONS
+		private void makeVotingButtons(int noOfButtons) {
+			for(int i = 0; i < noOfButtons; i++) {
+				final Integer innerMi = new Integer(i+1);
+				JButton temp = new JButton(Integer.toString(i+1));
+				
+				temp.setPreferredSize(new Dimension(40,40));
+				votingButtons.add(temp);
+				votingPanel.add(temp);
+				temp.addActionListener((e) -> {sendVote(innerMi);});
+			}	
+		}
+		//CREATES VOTING MENU
+		private void makeVotingMenu() {
+			votePanel = new JPanel();
+			votePanel.setBorder(new EtchedBorder());
+			votePanel.setLayout(new BoxLayout(votePanel, BoxLayout.PAGE_AXIS));
+			
+			jl2 = new JLabel("Rösta på: ");
+			jl2.setBorder(new EtchedBorder());	
+			
+			JPanel subHeadPanel = new JPanel();
+			subHeadPanel.setBorder(new EtchedBorder());
+			subHeadPanel.setLayout(new BoxLayout(subHeadPanel, BoxLayout.PAGE_AXIS));
+			
+			votingPanel = new JPanel(new GridLayout(1,5));
+			votingPanel.setBorder(new EtchedBorder());
+			makeVotingButtons(5);
+				
+			subHeadPanel.add(new JLabel("Tomas fika"));	
+			subHeadPanel.add(votingPanel);
+					
+			votePanel.add(jl2);
+			votePanel.add(subHeadPanel);
+			votePanel.add(new JPanel());
+			jp.add(votePanel);
 			
 		}
+		//MAKES MENUBAR
+		private void makeMenuBar() {
+			
+			fileMenu = new JMenu("File");
+			login = new JMenuItem("Login");
+			fileMenu.add(login);
+			
+			quit = new JMenuItem("Quit");
+			fileMenu.add(quit);
+		
+			helpMenu = new JMenu("Help");
+			help = new JMenuItem("Help");
+			helpMenu.add(help);
+		
+			menubar = new JMenuBar();
+			menubar.add(fileMenu);
+			menubar.add(helpMenu);
+			setJMenuBar(menubar);
+		}
+		
 }
