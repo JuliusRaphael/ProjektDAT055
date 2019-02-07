@@ -148,6 +148,9 @@ public class Gui extends JFrame{
 			
 			setSize(1100,500);
 			add(jp);
+			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+			this.setLocation((dim.width/2-this.getSize().width/2), (dim.height/2-this.getSize().height/2));
+			pack();
 			setVisible(true);
 			
 		}
