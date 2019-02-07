@@ -29,5 +29,10 @@ public class Vote {
 	public void setCurrRating(int currRating) {
 		this.currRating = currRating;
 	}
+	public void resetVote(User curr) {
+		this.current = curr;
+		this.noOfVotes=0;
+		this.currRating=0;
+	}
 
 }
