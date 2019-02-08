@@ -5,11 +5,7 @@ public class Vote {
 	private int currRating;
 	
 	public Vote(){
-		
 	}
-	
-	
-	
 	
 	public User getCurrent() {
 		return current;
@@ -28,6 +24,15 @@ public class Vote {
 	}
 	public void setCurrRating(int currRating) {
 		this.currRating = currRating;
+	}
+	//new
+	public void resetAll() {
+		this.currRating = 0;
+		this.noOfVotes = 0;
+	}
+	
+	public int calculate() {
+		return currRating / noOfVotes;
 	}
 
 }
